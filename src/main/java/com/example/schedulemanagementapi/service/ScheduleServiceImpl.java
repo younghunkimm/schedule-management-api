@@ -4,6 +4,7 @@ import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,14 +12,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
 
     @Transactional
     @Override
