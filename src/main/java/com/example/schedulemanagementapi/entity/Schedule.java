@@ -33,4 +33,13 @@ public class Schedule extends BaseEntity {
         this.password = password;
     }
 
+    // 제목 수정을 위한 Setter
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    // 이름 수정을 위한 Setter
+    public void updateName(String name) {
+        this.name = name;
+    }
 }
