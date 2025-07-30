@@ -21,7 +21,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
 
         // 요청 데이터로 Schedule 객체 생성
-        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), requestDto.getAuthor(), requestDto.getPassword());
+        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), requestDto.getName(), requestDto.getPassword());
 
         // 받아온 매핑된 Schedule 객체를 DTO로 생성하여 반환
         Schedule savedSchedule = scheduleRepository.save(schedule);
