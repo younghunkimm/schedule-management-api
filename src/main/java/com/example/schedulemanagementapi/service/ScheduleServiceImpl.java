@@ -61,4 +61,34 @@ public class ScheduleServiceImpl implements ScheduleService {
         return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id)));
     }
 
+    @Transactional
+    @Override
+    public ScheduleResponseDto updateScheduleTitleAndName(
+            Long id,
+            ScheduleRequestDto requestDto
+    ) {
+
+        // 데이터 유효성 검사
+        // 비밀번호 NPE check
+        if (requestDto.getPassword() == null || requestDto.getPassword().isEmpty()) {
+            // 400 BAD REQUEST
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is empty");
+        }
+
+        // 해당 ID의 일정이 있는지 확인
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id));
+
+        // 비밀번호 일치 확인
+        if (!schedule.getPassword().equals(requestDto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
+        }
+
+        // Dirty Checking
+        // @Transactional이 있다면 setter만 호출해도 업데이트가 반영된다.
+        if (requestDto.getTitle() != null && !requestDto.getTitle().isBlank()) schedule.updateTitle(requestDto.getTitle());
+        if (requestDto.getName() != null && !requestDto.getName().isBlank()) schedule.updateName(requestDto.getName());
+
+        return new ScheduleResponseDto(schedule);
+    }
+
 }
