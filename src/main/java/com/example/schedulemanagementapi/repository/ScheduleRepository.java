@@ -4,6 +4,8 @@ import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * <h2>제네릭 타입에 DTO를 못넣는 이유</h2>
  * <ul>
@@ -13,4 +15,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * </ul>
  */
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+
+    /**
+     * <ul>
+     *     <li>JPA가 메서드 이름을 해석하여 자동으로 JPQL 쿼리를 생성</li>
+     *     <li>{@code findByNameContaining} -> {@code LIKE %값%}</li>
+     * </ul>
+     */
+    List<Schedule> findByNameContainingOrderByUpdatedAtDesc(String name);
+
+    List<Schedule> findAllByOrderByUpdatedAtDesc();
 }
