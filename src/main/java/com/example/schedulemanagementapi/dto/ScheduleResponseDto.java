@@ -11,7 +11,7 @@ public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String contents;
-    private String author;
+    private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -20,7 +20,7 @@ public class ScheduleResponseDto {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
-        this.author = schedule.getAuthor();
+        this.name = schedule.getName();
         this.createdAt = schedule.getCreatedAt();
         this.updatedAt = schedule.getUpdatedAt();
     }
