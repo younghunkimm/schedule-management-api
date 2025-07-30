@@ -7,6 +7,8 @@ import com.example.schedulemanagementapi.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
@@ -26,6 +28,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         // 받아온 매핑된 Schedule 객체를 DTO로 생성하여 반환
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+
+        return scheduleRepository.findAll().stream()
+                .map(ScheduleResponseDto::new)
+                .toList();
     }
 
 }
