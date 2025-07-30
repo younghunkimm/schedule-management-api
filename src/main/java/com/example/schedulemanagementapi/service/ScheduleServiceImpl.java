@@ -4,8 +4,10 @@ import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,6 +39,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findAll().stream()
                 .map(ScheduleResponseDto::new)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+
+        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id)));
     }
 
 }
