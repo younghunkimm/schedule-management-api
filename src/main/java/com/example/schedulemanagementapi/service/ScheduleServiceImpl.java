@@ -34,9 +34,24 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public List<ScheduleResponseDto> findAllSchedules(
+            String name
+    ) {
 
-        return scheduleRepository.findAll().stream()
+        // NPE 체크
+        /*
+        isEmpty() VS isBlank()
+        isEmpty(): " " <- false
+        isBlank(): " " <- true
+         */
+        List<Schedule> foundSchedules;
+        if (name != null && !name.isBlank()) {
+            foundSchedules = scheduleRepository.findByNameContainingOrderByUpdatedAtDesc(name);
+        } else {
+            foundSchedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
+        }
+
+        return foundSchedules.stream()
                 .map(ScheduleResponseDto::new)
                 .toList();
     }
