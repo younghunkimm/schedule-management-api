@@ -13,7 +13,7 @@ public class ScheduleResponseDto {
     private final String contents;
     private final String name;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final LocalDateTime modifiedAt;
 
     public ScheduleResponseDto(Schedule schedule) {
 
@@ -22,7 +22,7 @@ public class ScheduleResponseDto {
         this.contents = schedule.getContents();
         this.name = schedule.getName();
         this.createdAt = schedule.getCreatedAt();
-        this.updatedAt = schedule.getUpdatedAt();
+        this.modifiedAt = schedule.getModifiedAt();
     }
 
 }
