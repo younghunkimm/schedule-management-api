@@ -26,4 +26,11 @@ public class Schedule extends BaseEntity {
 
     private String password; // 비밀번호
 
+    public Schedule(String title, String contents, String author, String password) {
+        this.title = title;
+        this.contents = contents;
+        this.author = author;
+        this.password = password;
+    }
+
 }
