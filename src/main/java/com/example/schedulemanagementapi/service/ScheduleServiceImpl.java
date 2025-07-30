@@ -46,9 +46,9 @@ public class ScheduleServiceImpl implements ScheduleService {
          */
         List<Schedule> foundSchedules;
         if (name != null && !name.isBlank()) {
-            foundSchedules = scheduleRepository.findByNameContainingOrderByUpdatedAtDesc(name);
+            foundSchedules = scheduleRepository.findByNameContainingOrderByModifiedAtDesc(name);
         } else {
-            foundSchedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
+            foundSchedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
         }
 
         return foundSchedules.stream()

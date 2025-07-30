@@ -22,7 +22,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
      *     <li>{@code findByNameContaining} -> {@code LIKE %값%}</li>
      * </ul>
      */
-    List<Schedule> findByNameContainingOrderByUpdatedAtDesc(String name);
+    List<Schedule> findByNameContainingOrderByModifiedAtDesc(String name);
 
-    List<Schedule> findAllByOrderByUpdatedAtDesc();
+    List<Schedule> findAllByOrderByModifiedAtDesc();
 }
