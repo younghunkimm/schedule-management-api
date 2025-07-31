@@ -40,7 +40,8 @@ public class Comment extends BaseEntity {
 
     private String password; // 비밀번호
 
-    public Comment(String contents, String name, String password) {
+    public Comment(Schedule schedule, String contents, String name, String password) {
+        this.schedule = schedule;
         this.contents = contents;
         this.name = name;
         this.password = password;
