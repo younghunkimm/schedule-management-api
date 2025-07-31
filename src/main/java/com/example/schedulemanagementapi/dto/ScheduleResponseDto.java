@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
@@ -14,6 +15,7 @@ public class ScheduleResponseDto {
     private final String title;
     private final String contents;
     private final String name;
+    private final List<CommentResponseDto> comments;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
@@ -23,6 +25,9 @@ public class ScheduleResponseDto {
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
         this.name = schedule.getName();
+        this.comments = schedule.getComments().stream()
+                .map(CommentResponseDto::new)
+                .toList();
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
     }
