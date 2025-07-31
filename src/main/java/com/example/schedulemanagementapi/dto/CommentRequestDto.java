@@ -6,7 +6,7 @@ import lombok.Getter;
 public class CommentRequestDto {
 
     private Long scheduleId;
-    private String content;
+    private String contents;
     private String name;
     private String password;
 }
