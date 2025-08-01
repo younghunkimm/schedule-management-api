@@ -18,12 +18,12 @@
 
 ##### JSON
 
-| 이름 | 타입 | 설명 | 필수 |
-| :-- | :-- | :-- | :-: |
-| title | String | 일정 제목 | ⭕ |
-| contents | String | 일정 내용 | ⭕ |
-| name | String | 작성자명 | ⭕ |
-| password | String | 비밀번호 | ⭕ |
+| 이름 | 타입 | 설명 | 조건 | 필수 |
+| :-- | :-- | :-- | :-- | :-: |
+| title | String | 일정 제목 | 최대 30자 | ⭕ |
+| contents | String | 일정 내용 | 최대 200자 | ⭕ |
+| name | String | 작성자명 |  | ⭕ |
+| password | String | 비밀번호 |  | ⭕ |
 
 ```http
 POST /schedules HTTP/1.1
@@ -97,9 +97,9 @@ Host: localhost:8080
 
 ##### Query Parameter
 
-| 이름 | 타입 | 설명 | 필수 |
-| :-- | :-- | :-- | :-: |
-| name | String | 해당 일정의 작성자명으로 검색 | ❌ |
+| 이름 | 타입 | 설명 | 조건 | 필수 |
+| :-- | :-- | :-- | :-- | :-: |
+| name | String | 해당 일정의 작성자명으로 검색 |  | ❌ |
 
 ```http
 GET /schedules?name=홍길 HTTP/1.1
@@ -169,11 +169,11 @@ Host: localhost:8080
 
 ##### JSON
 
-| 이름 | 타입 | 설명 | 필수 |
-| :-- | :-- | :-- | :-: |
-| title | String | 일정 제목 | ❌ |
-| name | String | 작성자명 | ❌ |
-| password | String | 비밀번호 | ⭕ |
+| 이름 | 타입 | 설명 | 조건 | 필수 |
+| :-- | :-- | :-- | :-- | :-: |
+| title | String | 일정 제목 | 최대 30자 | ❌ |
+| name | String | 작성자명 |  | ❌ |
+| password | String | 비밀번호 |  | ⭕ |
 
 ```http
 PATCH /schedules/1 HTTP/1.1
@@ -207,9 +207,9 @@ Content-Length: 73
 
 ##### JSON
 
-| 이름 | 타입 | 설명 | 필수 |
-| :-- | :-- | :-- | :-: |
-| password | String | 비밀번호 | ⭕ |
+| 이름 | 타입 | 설명 | 조건 |  필수 |
+| :-- | :-- | :-- | :-- | :-: |
+| password | String | 비밀번호 |  | ⭕ |
 
 ```http
 DELETE /schedules/3 HTTP/1.1
@@ -235,11 +235,11 @@ This request doesn't return any response body.
 
 ##### JSON
 
-| 이름 | 타입 | 설명 | 필수 |
-| :-- | :-- | :-- | :-: |
-| contents | String | 댓글 내용 | ⭕ |
-| name | String | 작성자명 | ⭕ |
-| password | String | 비밀번호 | ⭕ |
+| 이름 | 타입 | 설명 | 조건 | 필수 |
+| :-- | :-- | :-- | :-- | :-: |
+| contents | String | 댓글 내용 | 최대 100자 | ⭕ |
+| name | String | 작성자명 |  | ⭕ |
+| password | String | 비밀번호 |  | ⭕ |
 
 ```http
 POST /schedules/1/comments HTTP/1.1
