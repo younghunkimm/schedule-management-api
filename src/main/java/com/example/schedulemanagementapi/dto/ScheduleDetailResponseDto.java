@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
-public class ScheduleResponseDto {
+public class ScheduleDetailResponseDto {
 
     private final Long id;
     private final String title;
@@ -19,7 +19,7 @@ public class ScheduleResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public ScheduleResponseDto(Schedule schedule) {
+    public ScheduleDetailResponseDto(Schedule schedule) {
 
         this.id = schedule.getId();
         this.title = schedule.getTitle();

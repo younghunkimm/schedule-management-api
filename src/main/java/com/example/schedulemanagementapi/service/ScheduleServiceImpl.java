@@ -1,7 +1,8 @@
 package com.example.schedulemanagementapi.service;
 
+import com.example.schedulemanagementapi.dto.ScheduleDetailResponseDto;
 import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
-import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
+import com.example.schedulemanagementapi.dto.ScheduleSummaryResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +20,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
+    public ScheduleSummaryResponseDto saveSchedule(ScheduleRequestDto requestDto) {
 
         // 요청 데이터로 Schedule 객체 생성
         Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), requestDto.getName(), requestDto.getPassword());
 
         // 받아온 매핑된 Schedule 객체를 DTO로 생성하여 반환
         Schedule savedSchedule = scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(savedSchedule);
+        return new ScheduleSummaryResponseDto(savedSchedule);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(
+    public List<ScheduleSummaryResponseDto> findAllSchedules(
             String name
     ) {
 
@@ -49,20 +50,20 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         return foundSchedules.stream()
-                .map(ScheduleResponseDto::new)
+                .map(ScheduleSummaryResponseDto::new)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public ScheduleResponseDto findScheduleById(Long id) {
+    public ScheduleDetailResponseDto findScheduleById(Long id) {
 
-        return new ScheduleResponseDto(scheduleValidator.findScheduleByIdOrElseThrow(id));
+        return new ScheduleDetailResponseDto(scheduleValidator.findScheduleByIdOrElseThrow(id));
     }
 
     @Transactional
     @Override
-    public ScheduleResponseDto updateScheduleTitleAndName(
+    public ScheduleSummaryResponseDto updateScheduleTitleAndName(
             Long id,
             ScheduleRequestDto requestDto
     ) {
@@ -76,7 +77,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (requestDto.getTitle() != null && !requestDto.getTitle().isBlank()) schedule.updateTitle(requestDto.getTitle());
         if (requestDto.getName() != null && !requestDto.getName().isBlank()) schedule.updateName(requestDto.getName());
 
-        return new ScheduleResponseDto(schedule);
+        return new ScheduleSummaryResponseDto(schedule);
     }
 
     @Transactional

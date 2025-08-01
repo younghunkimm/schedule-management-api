@@ -1,0 +1,30 @@
+package com.example.schedulemanagementapi.dto;
+
+import com.example.schedulemanagementapi.entity.Schedule;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@RequiredArgsConstructor
+@Getter
+public class ScheduleSummaryResponseDto {
+
+    private final Long id;
+    private final String title;
+    private final String contents;
+    private final String name;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
+
+    public ScheduleSummaryResponseDto(Schedule schedule) {
+
+        this.id = schedule.getId();
+        this.title = schedule.getTitle();
+        this.contents = schedule.getContents();
+        this.name = schedule.getName();
+        this.createdAt = schedule.getCreatedAt();
+        this.modifiedAt = schedule.getModifiedAt();
+    }
+
+}
