@@ -24,15 +24,15 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto) {
 
         // 필수값 체크
-        if (StringUtils.hasText(requestDto.getContents())) {
+        if (!StringUtils.hasText(requestDto.getContents())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Content is required");
         }
 
-        if (StringUtils.hasText(requestDto.getName())) {
+        if (!StringUtils.hasText(requestDto.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
         }
 
-        if (StringUtils.hasText(requestDto.getPassword())) {
+        if (!StringUtils.hasText(requestDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
         }
 
