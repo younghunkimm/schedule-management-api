@@ -24,6 +24,24 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto) {
 
+        // 필수값 체크
+        if (requestDto.getContents() == null || requestDto.getContents().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Content is required");
+        }
+
+        if (requestDto.getName() == null || requestDto.getName().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
+        }
+
+        if (requestDto.getPassword() == null || requestDto.getPassword().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
+        }
+
+        // 길이 제한
+        if (requestDto.getContents().length() > 100) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the content is exceeded. Please write within 100 characters.");
+        }
+
         // scheduleId로 일정을 조회
         Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(scheduleId);
 
