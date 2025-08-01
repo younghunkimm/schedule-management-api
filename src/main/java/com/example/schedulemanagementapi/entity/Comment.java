@@ -1,5 +1,6 @@
 package com.example.schedulemanagementapi.entity;
 
+import com.example.schedulemanagementapi.global.security.PasswordHolder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends BaseEntity {
+public class Comment extends BaseEntity implements PasswordHolder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +46,10 @@ public class Comment extends BaseEntity {
         this.contents = contents;
         this.name = name;
         this.password = password;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 }

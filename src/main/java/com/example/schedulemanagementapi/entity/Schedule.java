@@ -1,5 +1,6 @@
 package com.example.schedulemanagementapi.entity;
 
+import com.example.schedulemanagementapi.global.security.PasswordHolder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule extends BaseEntity {
+public class Schedule extends BaseEntity implements PasswordHolder {
 
     @Id // PRIMARY KEY 로 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO INCREMENT
@@ -51,6 +52,11 @@ public class Schedule extends BaseEntity {
         this.contents = contents;
         this.name = name;
         this.password = password;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     // 제목 수정을 위한 Setter

@@ -4,8 +4,10 @@ import com.example.schedulemanagementapi.dto.ScheduleDetailResponseDto;
 import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapi.dto.ScheduleSummaryResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
+import com.example.schedulemanagementapi.global.util.EntityFinder;
+import com.example.schedulemanagementapi.global.util.StringHelper;
+import com.example.schedulemanagementapi.global.validation.PasswordValidator;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
-import com.example.schedulemanagementapi.util.StringExtension;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,8 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final ScheduleValidator scheduleValidator;
+    private final EntityFinder entityFinder;
+    private final PasswordValidator passwordValidator;
 
     @Transactional
     @Override
@@ -44,11 +47,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // 길이 제한
-        if (StringExtension.isLengthBetween(requestDto.getTitle(), 1, 30)) {
+        if (!StringHelper.isLengthBetween(requestDto.getTitle(), 1, 30)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the title is exceeded. Please write within 30 characters.");
         }
 
-        if (StringExtension.isLengthBetween(requestDto.getContents(), 1, 200)) {
+        if (!StringHelper.isLengthBetween(requestDto.getContents(), 1, 200)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the content is exceeded. Please write within 200 characters.");
         }
 
@@ -88,7 +91,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleDetailResponseDto findScheduleById(Long id) {
 
-        return new ScheduleDetailResponseDto(scheduleValidator.findScheduleByIdOrElseThrow(id));
+        return new ScheduleDetailResponseDto(entityFinder.findByIdOrElseThrow(scheduleRepository, id));
     }
 
     @Transactional
@@ -98,9 +101,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             ScheduleRequestDto requestDto
     ) {
 
-        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(id);
+        Schedule schedule = entityFinder.findByIdOrElseThrow(scheduleRepository, id);
 
-        scheduleValidator.checkPasswordMatch(schedule, requestDto.getPassword());
+        passwordValidator.validatePassword(schedule, requestDto.getPassword());
 
         // Dirty Checking
         // @Transactional이 있다면 setter만 호출해도 업데이트가 반영된다.
@@ -114,9 +117,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteSchedule(Long id, ScheduleRequestDto requestDto) {
 
-        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(id);
+        Schedule schedule = entityFinder.findByIdOrElseThrow(scheduleRepository, id);
 
-        scheduleValidator.checkPasswordMatch(schedule, requestDto.getPassword());
+        passwordValidator.validatePassword(schedule, requestDto.getPassword());
 
         scheduleRepository.deleteById(id);
     }
