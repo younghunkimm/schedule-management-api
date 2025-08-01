@@ -18,14 +18,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleValidator scheduleValidator;
 
     @Transactional
     @Override
     public CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto) {
 
         // scheduleId로 일정을 조회
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists scheduleId = " + scheduleId));
+        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(scheduleId);
 
         // 댓글 개수 체크 (최대 10개)
         int commentCount = schedule.getComments().size();
