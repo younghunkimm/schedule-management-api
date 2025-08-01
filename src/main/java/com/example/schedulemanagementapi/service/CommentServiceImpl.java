@@ -4,7 +4,10 @@ import com.example.schedulemanagementapi.dto.CommentRequestDto;
 import com.example.schedulemanagementapi.dto.CommentResponseDto;
 import com.example.schedulemanagementapi.entity.Comment;
 import com.example.schedulemanagementapi.entity.Schedule;
+import com.example.schedulemanagementapi.global.util.EntityFinder;
+import com.example.schedulemanagementapi.global.util.StringHelper;
 import com.example.schedulemanagementapi.repository.CommentRepository;
+import com.example.schedulemanagementapi.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final ScheduleValidator scheduleValidator;
+    private final ScheduleRepository scheduleRepository;
+    private final EntityFinder entityFinder;
 
     @Transactional
     @Override
@@ -37,12 +41,12 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // 길이 제한
-        if (requestDto.getContents().length() > 100) {
+        if (!StringHelper.isLengthBetween(requestDto.getContents(), 1, 100)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the content is exceeded. Please write within 100 characters.");
         }
 
         // scheduleId로 일정을 조회
-        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(scheduleId);
+        Schedule schedule = entityFinder.findByIdOrElseThrow(scheduleRepository, scheduleId);
 
         // 댓글 개수 체크 (최대 10개)
         int commentCount = schedule.getComments().size();
