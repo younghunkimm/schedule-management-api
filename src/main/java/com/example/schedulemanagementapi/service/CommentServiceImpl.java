@@ -5,11 +5,11 @@ import com.example.schedulemanagementapi.dto.CommentResponseDto;
 import com.example.schedulemanagementapi.entity.Comment;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.CommentRepository;
-import com.example.schedulemanagementapi.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final ScheduleRepository scheduleRepository;
     private final ScheduleValidator scheduleValidator;
 
     @Transactional
@@ -25,15 +24,15 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto) {
 
         // 필수값 체크
-        if (requestDto.getContents() == null || requestDto.getContents().isBlank()) {
+        if (StringUtils.hasText(requestDto.getContents())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Content is required");
         }
 
-        if (requestDto.getName() == null || requestDto.getName().isBlank()) {
+        if (StringUtils.hasText(requestDto.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
         }
 
-        if (requestDto.getPassword() == null || requestDto.getPassword().isBlank()) {
+        if (StringUtils.hasText(requestDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
         }
 
