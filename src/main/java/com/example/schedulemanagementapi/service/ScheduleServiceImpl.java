@@ -5,10 +5,8 @@ import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,6 +15,7 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleValidator scheduleValidator;
 
     @Transactional
     @Override
@@ -58,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id)));
+        return new ScheduleResponseDto(scheduleValidator.findScheduleByIdOrElseThrow(id));
     }
 
     @Transactional
@@ -68,20 +67,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             ScheduleRequestDto requestDto
     ) {
 
-        // 데이터 유효성 검사
-        // 비밀번호 NPE check
-        if (requestDto.getPassword() == null || requestDto.getPassword().isEmpty()) {
-            // 400 BAD REQUEST
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is empty");
-        }
+        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(id);
 
-        // 해당 ID의 일정이 있는지 확인
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id));
-
-        // 비밀번호 일치 확인
-        if (!schedule.getPassword().equals(requestDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
-        }
+        scheduleValidator.checkPasswordMatch(schedule, requestDto.getPassword());
 
         // Dirty Checking
         // @Transactional이 있다면 setter만 호출해도 업데이트가 반영된다.
@@ -94,20 +82,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public void deleteSchedule(Long id, ScheduleRequestDto requestDto) {
-        // 데이터 유효성 검사
-        // 비밀번호 NPE check
-        if (requestDto.getPassword() == null || requestDto.getPassword().isEmpty()) {
-            // 400 BAD REQUEST
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is empty");
-        }
 
-        // 해당 ID의 일정이 있는지 확인
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = " + id));
+        Schedule schedule = scheduleValidator.findScheduleByIdOrElseThrow(id);
 
-        // 비밀번호 일치 확인
-        if (!schedule.getPassword().equals(requestDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
-        }
+        scheduleValidator.checkPasswordMatch(schedule, requestDto.getPassword());
 
         scheduleRepository.deleteById(id);
     }
