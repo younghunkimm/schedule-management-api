@@ -5,10 +5,12 @@ import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapi.dto.ScheduleSummaryResponseDto;
 import com.example.schedulemanagementapi.entity.Schedule;
 import com.example.schedulemanagementapi.repository.ScheduleRepository;
+import com.example.schedulemanagementapi.util.StringExtension;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -25,28 +27,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleSummaryResponseDto saveSchedule(ScheduleRequestDto requestDto) {
 
         // 필수값 체크
-        if (requestDto.getTitle() == null || requestDto.getTitle().isBlank()) {
+        if (StringUtils.hasText(requestDto.getTitle())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title is required");
         }
 
-        if (requestDto.getContents() == null || requestDto.getContents().isBlank()) {
+        if (StringUtils.hasText(requestDto.getContents())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Content is required");
         }
 
-        if (requestDto.getName() == null || requestDto.getName().isBlank()) {
+        if (StringUtils.hasText(requestDto.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
         }
 
-        if (requestDto.getPassword() == null || requestDto.getPassword().isBlank()) {
+        if (StringUtils.hasText(requestDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
         }
 
         // 길이 제한
-        if (requestDto.getTitle().length() > 30) {
+        if (StringExtension.isLengthBetween(requestDto.getTitle(), 1, 30)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the title is exceeded. Please write within 30 characters.");
         }
 
-        if (requestDto.getContents().length() > 200) {
+        if (StringExtension.isLengthBetween(requestDto.getContents(), 1, 200)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the content is exceeded. Please write within 200 characters.");
         }
 
@@ -71,7 +73,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         isBlank(): " " <- true
          */
         List<Schedule> foundSchedules;
-        if (name != null && !name.isBlank()) {
+        if (StringUtils.hasText(name)) {
             foundSchedules = scheduleRepository.findByNameContainingOrderByModifiedAtDesc(name);
         } else {
             foundSchedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
@@ -102,8 +104,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         // Dirty Checking
         // @Transactional이 있다면 setter만 호출해도 업데이트가 반영된다.
-        if (requestDto.getTitle() != null && !requestDto.getTitle().isBlank()) schedule.updateTitle(requestDto.getTitle());
-        if (requestDto.getName() != null && !requestDto.getName().isBlank()) schedule.updateName(requestDto.getName());
+        if (StringUtils.hasText(requestDto.getTitle())) schedule.updateTitle(requestDto.getTitle());
+        if (StringUtils.hasText(requestDto.getName())) schedule.updateName(requestDto.getName());
 
         return new ScheduleSummaryResponseDto(schedule);
     }
