@@ -1,7 +1,8 @@
 package com.example.schedulemanagementapi.controller;
 
 import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
-import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
+import com.example.schedulemanagementapi.dto.ScheduleDetailResponseDto;
+import com.example.schedulemanagementapi.dto.ScheduleSummaryResponseDto;
 import com.example.schedulemanagementapi.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +21,14 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleSummaryResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
 
         // 생성에 성공한다면 반환받은 데이터를 [201 Created]와 함께 클라이언트에게 응답
         return new ResponseEntity<>(scheduleService.saveSchedule(requestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(
+    public ResponseEntity<List<ScheduleSummaryResponseDto>> findAllSchedules(
             @RequestParam(required = false) String name
     ) {
         log.info("name={}", name);
@@ -37,7 +38,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
+    public ResponseEntity<ScheduleDetailResponseDto> findScheduleById(@PathVariable Long id) {
 
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
@@ -47,7 +48,7 @@ public class ScheduleController {
      * <p>메서드명을 직관적으로 작성하여 분리</p>
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> updateScheduleTitleAndName(
+    public ResponseEntity<ScheduleSummaryResponseDto> updateScheduleTitleAndName(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto requestDto
     ) {

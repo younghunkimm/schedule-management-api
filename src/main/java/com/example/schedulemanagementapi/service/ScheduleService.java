@@ -1,19 +1,20 @@
 package com.example.schedulemanagementapi.service;
 
+import com.example.schedulemanagementapi.dto.ScheduleDetailResponseDto;
 import com.example.schedulemanagementapi.dto.ScheduleRequestDto;
-import com.example.schedulemanagementapi.dto.ScheduleResponseDto;
+import com.example.schedulemanagementapi.dto.ScheduleSummaryResponseDto;
 
 import java.util.List;
 
 public interface ScheduleService {
 
-    ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto);
+    ScheduleSummaryResponseDto saveSchedule(ScheduleRequestDto requestDto);
 
-    List<ScheduleResponseDto> findAllSchedules(String name);
+    List<ScheduleSummaryResponseDto> findAllSchedules(String name);
 
-    ScheduleResponseDto findScheduleById(Long id);
+    ScheduleDetailResponseDto findScheduleById(Long id);
 
-    ScheduleResponseDto updateScheduleTitleAndName(Long id, ScheduleRequestDto requestDto);
+    ScheduleSummaryResponseDto updateScheduleTitleAndName(Long id, ScheduleRequestDto requestDto);
 
     void deleteSchedule(Long id, ScheduleRequestDto requestDto);
 }
