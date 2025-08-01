@@ -107,7 +107,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         // Dirty Checking
         // @Transactional이 있다면 setter만 호출해도 업데이트가 반영된다.
-        if (StringUtils.hasText(requestDto.getTitle())) schedule.updateTitle(requestDto.getTitle());
+        if (StringUtils.hasText(requestDto.getTitle())) {
+            if (!StringHelper.isLengthBetween(requestDto.getTitle(), 1, 30)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The length of the title is exceeded. Please write within 30 characters.");
+            }
+
+            schedule.updateTitle(requestDto.getTitle());
+        }
         if (StringUtils.hasText(requestDto.getName())) schedule.updateName(requestDto.getName());
 
         return new ScheduleSummaryResponseDto(schedule);
